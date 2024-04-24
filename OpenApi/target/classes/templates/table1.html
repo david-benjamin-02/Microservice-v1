@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .popup {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            width: 400px;
+        }
+
+        .popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+
+        .popup-buttons {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .popup-buttons button {
+            margin-left: 10px;
+        }
+
+        .row-details {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: relative;
+        }
+
+        .row-details .close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Selected Rows Details</h1>
+    <div id="details-container">
+        <table id="apiTable" class="table" th:each="api : ${recordDetails}">
+            <tr>
+                <th class="path">Path URL</th>
+                <td th:text="${api.path_url}"></td>
+            </tr>
+            <tr>
+                <th>Method</th>
+                <td th:text="${api.method}"></td>
+            </tr>
+            <tr>
+                <th>Function Name</th>
+                <td th:text="${api.function_name}"></td>
+            </tr>
+            <tr>
+                <th>Summary</th>
+                <td th:text="${api.fun_description}"></td>
+            </tr>
+            <tr>
+                <th>Parameter</th>
+            </tr>
+            <tr>
+                <th>Parameter Datatype</th>
+            </tr>
+            <tr>
+                <th>Parameter Required</th>
+            </tr>
+            <tr>
+                <th>Parameter In</th>
+            </tr>
+            <!--            <tr th:each="api : ${recordDetails}" ondblclick="showPopup(this)">-->
+            <!--                <td><input type="checkbox" onclick="updateSelectedRowId(this)" th:value="${api.id}"></td>-->
+            <!--                <td th:text="${api.path_url}"></td>-->
+            <!--                <td th:text="${api.method}"></td>-->
+            <!--                <td th:text="${api.function_name}"></td>-->
+            <!--                <td th:text="${api.fun_description}"></td>-->
+            <!--                <td>-->
+            <!--    <span th:if="${api.parameters != null}">-->
+            <!--        <ul>-->
+            <!--            <li th:each="parameter : ${api.parameters}" th:text="${parameter.name}"></li>-->
+            <!--        </ul>-->
+            <!--      <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>-->
+            <!--    </span>-->
+            <!--                    <span th:unless="${api.parameters != null}">-</span>-->
+            <!--                </td>-->
+            <!--                <td>-->
+            <!--    <span th:if="${api.parameters != null}">-->
+            <!--        <ul>-->
+            <!--            <li th:each="parameter : ${api.parameters}">Integer</li>-->
+            <!--        </ul>-->
+            <!--      <span th:if="${#lists.isEmpty(api.parameters)}">Integer</span>-->
+            <!--    </span>-->
+            <!--                    <span th:unless="${api.parameters != null}">-</span>-->
+            <!--                </td>-->
+            <!--                <td>-->
+            <!--    <span th:if="${api.parameters != null}">-->
+            <!--        <ul>-->
+            <!--            <li th:each="parameter : ${api.parameters}" th:if="${parameter.required} != null" th:text="${parameter.required}"></li>-->
+            <!--        </ul>-->
+            <!--            <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>-->
+            <!--    </span>-->
+            <!--                    <span th:unless="${api.parameters != null}">-</span>-->
+            <!--                </td>-->
+            <!--                <td>-->
+            <!--    <span th:if="${api.parameters != null}">-->
+            <!--        <ul>-->
+            <!--            <li th:each="parameter : ${api.parameters}" th:if="${parameter.parameterIn} != null" th:text="${parameter.parameterIn}"></li>-->
+            <!--        </ul>-->
+            <!--            <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>-->
+            <!--    </span>-->
+            <!--                    <span th:unless="${api.parameters != null}">-</span>-->
+            <!--                </td>-->
+            <!--            </tr>-->
+            <!--            </tbody>-->
+        </table>
+        <!--        <div th:each="row : ${recordDetails}">-->
+        <!--            <div class="row-details">-->
+        <!--                <h2>API Details</h2>-->
+        <!--                <p><strong>Path URL:</strong> <span th:text="${row.pathUrl}"></span></p>-->
+        <!--                <p><strong>Method:</strong> <span th:text="${row.method}"></span></p>-->
+        <!--                <p><strong>Function Name:</strong> <span th:text="${row.functionName}"></span></p>-->
+        <!--                <p><strong>Summary:</strong> <span th:text="${row.summary}"></span></p>-->
+        <!--                <p><strong>Parameter:</strong> <span th:text="${row.paramName}"></span></p>-->
+        <!--                <p><strong>Parameter Datatype:</strong> <span th:text="${row.paramType}"></span></p>-->
+        <!--                <p><strong>Parameter Required:</strong> <span th:text="${row.paramRequired}"></span></p>-->
+        <!--                <p><strong>Parameter In:</strong> <span th:text="${row.paramIn}"></span></p>-->
+        <!--                <span class="close" onclick="closeRow(this)">X</span>-->
+        <!--            </div>-->
+    </div>
+</div>
+</div>
+
+<script>
+    function closeRow(element) {
+        element.parentNode.remove();
+    }
+</script>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .popup {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            width: 400px;
+        }
+
+        .popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+
+        .popup-buttons {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .popup-buttons button {
+            margin-left: 10px;
+        }
+
+        .row-details {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: relative;
+        }
+
+        .row-details .close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Selected Rows Details</h1>
+    <div id="details-container">
+        <table id="apiTable" class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th class="path">Path URL</th>
+                <th>Method</th>
+                <th>Function Name</th>
+                <th>Summary</th>
+                <th>Parameter</th>
+                <th>Parameter Datatype</th>
+                <th>Parameter Required</th>
+                <th>Parameter In</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="api : ${recordDetailsList}" ondblclick="showPopup(this)">
+                <td th:text="${api.path_url}"></td>
+                <td th:text="${api.method}"></td>
+                <td th:text="${api.function_name}"></td>
+                <td th:text="${api.fun_description}"></td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:text="${parameter.name}"></li>
+        </ul>
+      <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}">Integer</li>
+        </ul>
+      <span th:if="${#lists.isEmpty(api.parameters)}">Integer</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:if="${parameter.required} != null" th:text="${parameter.required}"></li>
+        </ul>
+            <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:if="${parameter.parameterIn} != null" th:text="${parameter.parameterIn}"></li>
+        </ul>
+            <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--        <div th:each="row : ${recordDetails}">-->
+        <!--            <div class="row-details">-->
+        <!--                <h2>API Details</h2>-->
+        <!--                <p><strong>Path URL:</strong> <span th:text="${row.pathUrl}"></span></p>-->
+        <!--                <p><strong>Method:</strong> <span th:text="${row.method}"></span></p>-->
+        <!--                <p><strong>Function Name:</strong> <span th:text="${row.functionName}"></span></p>-->
+        <!--                <p><strong>Summary:</strong> <span th:text="${row.summary}"></span></p>-->
+        <!--                <p><strong>Parameter:</strong> <span th:text="${row.paramName}"></span></p>-->
+        <!--                <p><strong>Parameter Datatype:</strong> <span th:text="${row.paramType}"></span></p>-->
+        <!--                <p><strong>Parameter Required:</strong> <span th:text="${row.paramRequired}"></span></p>-->
+        <!--                <p><strong>Parameter In:</strong> <span th:text="${row.paramIn}"></span></p>-->
+        <!--                <span class="close" onclick="closeRow(this)">X</span>-->
+        <!--            </div>-->
+    </div>
+</div>
+</div>
+
+<script>
+    function closeRow(element) {
+        element.parentNode.remove();
+    }
+</script>
+</body>
+
+</html>

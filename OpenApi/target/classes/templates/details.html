@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h4 {
+            text-align: center;
+            color:Red;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .details {
+            width: 48%;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .details h2 {
+            margin-top: 0;
+        }
+
+        .details p {
+            margin: 5px 0;
+        }
+
+        .details ul {
+            margin-top: 5px;
+            margin-left: 20px;
+            padding-left: 0;
+        }
+
+        .close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+
+        /* Added button styles */
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .buttons button {
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div th:if="${availability.id == cost.id}" class="details">
+        <span class="close" onclick="closeDivision(this)">x</span>
+        <h2>API Details</h2>
+        <h2>Customer Request Satisfied</h2>
+        <p><strong>Path URL:</strong> <span th:text="${availability.path_url}"></span></p>
+        <p><strong>Method:</strong> <span th:text="${availability.method}"></span></p>
+        <p><strong>Function Name:</strong> <span th:text="${availability.function_name}"></span></p>
+        <p><strong>Summary:</strong> <span th:text="${availability.fun_description}"></span></p>
+        <p><strong>Parameter:</strong>
+            <span th:if="${availability.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${availability.parameters}" th:text="${parameter.name}"></li>
+            </ul>
+        </span>
+            <span th:unless="${availability.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Parameter Datatype:</strong> String</p>
+        <p><strong>Parameter Required:</strong>
+            <span th:if="${availability.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${availability.parameters}" th:if="${parameter.required != null}" th:text="${parameter.required}"></li>
+            </ul>
+        </span>
+            <span th:unless="${availability.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Parameter In:</strong>
+            <span th:if="${availability.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${availability.parameters}" th:if="${parameter.parameterIn != null}" th:text="${parameter.parameterIn}"></li>
+            </ul>
+        </span>
+            <span th:unless="${availability.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Availability:</strong> <span th:text="${availability.availability}"></span></p>
+        <p><strong>Cost:</strong> <span th:text="${availability.cost}"></span></p>
+        <p><strong>Response Time:</strong> <span th:text="${availability.response_time}"></span></p>
+        <div class="buttons">
+            <button onclick="showOnly(this)">Buy</button>
+            <!-- <button onclick="closeDivision(this)">Close</button> -->
+        </div>
+    </div>
+
+    <div th:if="${cost != null}" class="details">
+        <span class="close" onclick="closeDivision(this)">x</span>
+        <h4>Your Cost only Matched</h4>
+        <p><strong>Path URL:</strong> <span th:text="${cost.path_url}"></span></p>
+        <p><strong>Method:</strong> <span th:text="${cost.method}"></span></p>
+        <p><strong>Function Name:</strong> <span th:text="${cost.function_name}"></span></p>
+        <p><strong>Summary:</strong> <span th:text="${cost.fun_description}"></span></p>
+        <p><strong>Parameter:</strong>
+            <span th:if="${cost.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${cost.parameters}" th:text="${parameter.name}"></li>
+            </ul>
+        </span>
+            <span th:unless="${cost.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Parameter Datatype:</strong> String</p>
+        <p><strong>Parameter Required:</strong>
+            <span th:if="${cost.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${cost.parameters}" th:if="${parameter.required != null}" th:text="${parameter.required}"></li>
+            </ul>
+        </span>
+            <span th:unless="${cost.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Parameter In:</strong>
+            <span th:if="${cost.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${cost.parameters}" th:if="${parameter.parameterIn != null}" th:text="${parameter.parameterIn}"></li>
+            </ul>
+        </span>
+            <span th:unless="${cost.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Availability:</strong> <span th:text="${cost.availability}"></span></p>
+        <p><strong>Cost:</strong> <span th:text="${cost.cost}"></span></p>
+        <p><strong>Response Time:</strong> <span th:text="${cost.response_time}"></span></p>
+        <div class="buttons">
+            <button onclick="showOnly(this)">Buy</button>
+            <!-- <button onclick="closeDivision(this)">Close</button> -->
+        </div>
+    </div>
+
+    <div th:if="${availability != null}" class="details">
+        <span class="close" onclick="closeDivision(this)">x</span>
+        <h4>Your Availability only Matched</h4>
+        <p><strong>Path URL:</strong> <span th:text="${availability.path_url}"></span></p>
+        <p><strong>Method:</strong> <span th:text="${availability.method}"></span></p>
+        <p><strong>Function Name:</strong> <span th:text="${availability.function_name}"></span></p>
+        <p><strong>Summary:</strong> <span th:text="${availability.fun_description}"></span></p>
+        <p><strong>Parameter:</strong>
+            <span th:if="${availability.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${availability.parameters}" th:text="${parameter.name}"></li>
+            </ul>
+        </span>
+            <span th:unless="${availability.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Parameter Datatype:</strong> String</p>
+        <p><strong>Parameter Required:</strong>
+            <span th:if="${availability.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${availability.parameters}" th:if="${parameter.required != null}" th:text="${parameter.required}"></li>
+            </ul>
+        </span>
+            <span th:unless="${availability.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Parameter In:</strong>
+            <span th:if="${availability.parameters != null}">
+            <ul>
+                <li th:each="parameter : ${availability.parameters}" th:if="${parameter.parameterIn != null}" th:text="${parameter.parameterIn}"></li>
+            </ul>
+        </span>
+            <span th:unless="${availability.parameters != null}">NULL</span>
+        </p>
+        <p><strong>Availability:</strong> <span th:text="${availability.availability}"></span></p>
+        <p><strong>Cost:</strong> <span th:text="${availability.cost}"></span></p>
+        <p><strong>Response Time:</strong> <span th:text="${availability.response_time}"></span></p>
+        <div class="buttons">
+            <button onclick="showOnly(this)">Buy</button>
+            <!-- <button onclick="closeDivision(this)">Close</button> -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // function closeDivision(button) {
+    //     button.parentNode.style.display = "none";
+    // }
+
+    function showOnly(button) {
+        var detailsDivs = document.getElementsByClassName("details");
+        for (var i = 0; i < detailsDivs.length; i++) {
+            detailsDivs[i].style.display = "none";
+        }
+        button.parentNode.parentNode.style.display = "block";
+        alert("Function purchased successfully")
+    }
+</script>
+
+</body>
+
+</html>

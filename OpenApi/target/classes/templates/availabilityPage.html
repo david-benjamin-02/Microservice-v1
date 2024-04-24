@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search for Availability</title><style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    .alert {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f44336;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        z-index: 9999; /* Ensure the alert is on top of other elements */
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        margin-top: 0;
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    button {
+        padding: 8px 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Discovery for Microservice</h1>
+    <form id="availabilityForm" action="/ServiceDetails" method="get" onsubmit="return validateForm()">
+
+        <label for="Service">Service:</label>
+        <input type="text" id="service" name="service" required>
+        <label for="availability">Availability:</label>
+        <input type="text" id="availability" name="availability" required>
+        <label for="cost">cost:</label>
+        <input type="text" id="cost" name="cost" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    function validateForm() {
+        var availability = document.getElementById("availability").value;
+        var cost = document.getElementById("cost").value;
+
+        if (isNaN(availability) || availability < 50 || availability > 99) {
+            showAlert("Availability must be a number between 50 and 99");
+            return false;
+        }
+
+        if (isNaN(cost) || cost < 5 || cost > 99) {
+            showAlert("Cost must be a number between 5 and 99");
+            return false;
+        }
+
+        return true;
+    }
+
+    function showAlert(message) {
+        var alertBox = document.createElement("div");
+        alertBox.setAttribute("class", "alert");
+        alertBox.innerHTML = message;
+        document.body.appendChild(alertBox);
+        setTimeout(function() {
+            alertBox.style.display = "none";
+        }, 2000); // Hide the alert after 2 seconds
+    }
+    document.getElementById('availabilityForm').addEventListener('submit', function(event) {
+        // Prevent the form from submitting normally
+
+
+        // Get the availability value from the form
+        var availability = document.getElementById('availability').value;
+        var service = document.getElementById('service').value;
+        var cost = document.getElementById('cost').value;
+
+        // Submit the form using AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/ServiceDetails?availability=' + availability + '&service=' + service + '&cost=' + cost);
+        xhr.send();
+    });
+</script>
+</body>
+</html>

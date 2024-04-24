@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #searchInput {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+            white-space: nowrap;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            width: 400px;
+        }
+
+        .popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+
+        .popup-buttons {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .popup-buttons button {
+            margin-left: 10px;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        /*#popup-content{*/
+        /*  max-height: 300px; !* Adjust as needed *!*/
+        /*  overflow-y: auto;*/
+        /*}*/
+        .pagination li {
+            list-style: none;
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #333;
+        }
+
+        .pagination li.active a {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .table-container {
+            max-height: 470px;
+            overflow-y: auto;
+        }
+
+        .path {
+            width: 150px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Search functionality
+            $('#searchInput').keyup(function () {
+                var searchText = $(this).val().toLowerCase();
+                $('#apiTable tbody tr').hide();
+                $('#apiTable tbody tr').each(function () {
+                    var rowText = $(this).text().toLowerCase();
+                    if (rowText.indexOf(searchText) !== -1) {
+                        $(this).show();
+                    }
+                });
+            });
+
+            // Pagination functionality
+            var rowsShown = 10;
+            var rowsTotal = $('#apiTable tbody tr').length;
+            var numPages = rowsTotal / rowsShown;
+            for (var i = 0; i < numPages; i++) {
+                var pageNum = i + 1;
+                $('.pagination').append('<li class="page-item"><a class="page-link" href="#" rel="' + i + '">' + pageNum + '</a></li>');
+            }
+            $('#apiTable tbody tr').hide();
+            $('#apiTable tbody tr').slice(0, rowsShown).show();
+            $('.pagination li:first').addClass('active');
+            $('.pagination a').bind('click', function () {
+                $('.pagination li').removeClass('active');
+                $(this).parent().addClass('active');
+                var currPage = $(this).attr('rel');
+                var startItem = currPage * rowsShown;
+                var endItem = startItem + rowsShown;
+                $('#apiTable tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+            });
+        });
+
+        function showPopup(row) {
+            var cells = $(row).find('td');
+            var pathUrl = cells.eq(0).text();
+            var method = cells.eq(1).text();
+            var functionName = cells.eq(2).text();
+            var summary = cells.eq(3).text();
+            var paramName = cells.eq(4).text();
+            var paramType = cells.eq(5).text();
+            var paramRequired = cells.eq(6).text();
+            var paramIn = cells.eq(7).text();
+
+            $('#popup-path-url').text(pathUrl);
+            $('#popup-method').text(method);
+            $('#popup-function-name').text(functionName);
+            $('#popup-summary').text(summary);
+            $('#popup-parameter-name').text(paramName);
+            $('#popup-parameter-datatype').text(paramType);
+            $('#popup-parameter-required').text(paramRequired);
+            $('#popup-parameter-in').text(paramIn);
+
+            $('.popup').show();
+        }
+
+        function closePopup() {
+            $('.popup').hide();
+        }
+
+        function cancelPopup() {
+            $('.popup').hide();
+        }
+
+        function buy() {
+            $('.popup').hide();
+            alert('Function Successfully Purchased');
+        }
+    </script>
+</head>
+
+<body>
+<div class="container">
+    <h1>API Listss</h1>
+    <input type="text" id="searchInput" class="form-control" placeholder="Search...">
+    <div class="table-container">
+        <table id="apiTable" class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th class="path">Path URL</th>
+                <th>Method</th>
+                <th>Function Name</th>
+                <th>Summary</th>
+                <th>Parameter</th>
+                <th>Parameter Datatype</th>
+                <th>Parameter Required</th>
+                <th>Parameter In</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="api : ${index}" ondblclick="showPopup(this)">
+                <td th:text="${api.path_url}"></td>
+                <td th:text="${api.method}"></td>
+                <td th:text="${api.function_name}"></td>
+                <td th:text="${api.fun_description}"></td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:text="${parameter.name}"></li>
+        </ul>
+      <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}">Integer</li>
+        </ul>
+      <span th:if="${#lists.isEmpty(api.parameters)}">Integer</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:if="${parameter.required} != null" th:text="${parameter.required}"></li>
+        </ul>
+            <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:if="${parameter.parameterIn} != null" th:text="${parameter.parameterIn}"></li>
+        </ul>
+            <span th:if="${#lists.isEmpty(api.parameters)}">NULL</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+        </ul>
+    </nav>
+</div>
+
+<div class="popup">
+    <span class="popup-close" onclick="closePopup()">X</span>
+    <div id="popup-content">
+        <h2>API Details</h2>
+        <p><strong>Path URL:</strong> <span id="popup-path-url"></span></p>
+        <p><strong>Method:</strong> <span id="popup-method"></span></p>
+        <p><strong>Function Name:</strong> <span id="popup-function-name"></span></p>
+        <p><strong>Summary:</strong> <span id="popup-summary"></span></p>
+        <p><strong>Parameter:</strong> <span id="popup-parameter-name"></span></p>
+        <p><strong>Parameter Datatype:</strong> <span id="popup-parameter-datatype"></span></p>
+        <p><strong>Parameter Required:</strong> <span id="popup-parameter-required"></span></p>
+        <p><strong>Parameter In:</strong> <span id="popup-parameter-in"></span></p>
+
+        <!--    <p><strong>Parameter Required:</strong> <span id="popup-parameter-required"></span></p>-->
+        <div class="popup-buttons">
+            <button onclick="cancelPopup()">Cancel</button>
+            <button onclick="buy()">Buy</button>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

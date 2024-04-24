@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Actuator1Application<actuator1>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.actuator.actuator1.Actuator1Application",
+            "projectName": "actuator1",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

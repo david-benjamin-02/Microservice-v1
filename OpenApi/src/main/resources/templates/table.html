@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API List</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <style>
+        /*li{*/
+        /*    list-style-type: none;*/
+        /*}*/
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1,h5 {
+            text-align: center;
+            color:Red;
+        }
+
+        table {
+            width: 95%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+            white-space: nowrap;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            width: 400px;
+        }
+
+        .popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+
+        .popup-buttons {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .popup-buttons button {
+            margin-left: 10px;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: #f2f2f2;
+        }
+
+        .table-container {
+            max-height: 470px;
+            overflow-y: auto;
+        }
+
+        .path {
+            width: 150px;
+        }
+        /*.para{*/
+        /*    text-align: center;*/
+        /*}*/
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#apiTable').DataTable({
+                "paging": true,
+                "pageLength": 10, // Show only 10 records per page
+                "lengthMenu": [10, 25, 50, 75, 100], // Options for records per page dropdown
+                "searching": true // Enable search bar
+            });
+        });
+
+
+        function showPopup(row) {
+            var cells = $(row).find('td');
+            var pathUrl = cells.eq(1).text();
+            var method = cells.eq(2).text();
+            var functionName = cells.eq(3).text();
+            var summary = cells.eq(4).text();
+            var paramName = cells.eq(5).text();
+            var paramType = cells.eq(6).text();
+            var paramRequired = cells.eq(7).text();
+            var paramIn = cells.eq(8).text();
+
+            $('#popup-path-url').text(pathUrl);
+            $('#popup-method').text(method);
+            $('#popup-function-name').text(functionName);
+            $('#popup-summary').text(summary);
+            $('#popup-parameter-name').text(paramName);
+            $('#popup-parameter-datatype').text(paramType);
+            $('#popup-parameter-required').text(paramRequired);
+            $('#popup-parameter-in').text(paramIn);
+
+            $('.popup').show();
+        }
+
+        function closePopup() {
+            $('.popup').hide();
+        }
+
+        function cancelPopup() {
+            $('.popup').hide();
+        }
+
+        function buy() {
+            $('.popup').hide();
+            alert('Function Successfully Purchased');
+        }
+        var selectedRowIds = [];
+
+        function updateSelectedRowId(checkbox) {
+            var selectedRowId = $(checkbox).val();
+            if (checkbox.checked) {
+                selectedRowIds.push(selectedRowId);
+            } else {
+                var index = selectedRowIds.indexOf(selectedRowId);
+                if (index !== -1) {
+                    selectedRowIds.splice(index, 1);
+                }
+            }
+            $('#selectedRowIds').val(selectedRowIds.join(','));
+        }
+    </script>
+</head>
+
+<body>
+<div class="container">
+    <h5 th:text="${message}"></h5>
+    <div class="table-container">
+        <form id="detailsForm" action="/details" method="post">
+            <table id="apiTable" class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th></th>
+                    <th class="path">Path URL</th>
+                    <th>Method</th>
+                    <th>Function Name</th>
+                    <th>Summary</th>
+                    <th>Parameter</th>
+                    <th>Parameter Datatype</th>
+                    <th>Parameter Required</th>
+                    <th>Parameter In</th>
+                </tr>
+                </thead>
+                <tbody>
+            <tr th:each="api : ${index}" ondblclick="showPopup(this)">
+                <td><input type="checkbox" onclick="updateSelectedRowId(this)" th:value="${api.id}"></td>
+                <td th:text="${api.path_url}"></td>
+                <td th:text="${api.method}"></td>
+                <td th:text="${api.function_name}"></td>
+                <td th:text="${api.fun_description}"></td>
+                <td class="para">
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:text="${parameter.name}"></li>
+        </ul>
+      <span th:if="${#lists.isEmpty(api.parameters)}"><i>null</i></span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}">String</li>
+        </ul>
+      <span th:if="${#lists.isEmpty(api.parameters)}">String</span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:if="${parameter.required} != null" th:text="${parameter.required}"></li>
+        </ul>
+            <span th:if="${#lists.isEmpty(api.parameters)}"><i>null</i></span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+                <td>
+    <span th:if="${api.parameters != null}">
+        <ul>
+            <li th:each="parameter : ${api.parameters}" th:if="${parameter.parameterIn} != null" th:text="${parameter.parameterIn}"></li>
+        </ul>
+            <span th:if="${#lists.isEmpty(api.parameters)}"><i>null</i></span>
+    </span>
+                    <span th:unless="${api.parameters != null}">-</span>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+            <input type="hidden" id="selectedRowIds" name="selectedRowIds" value="">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+<div class="popup">
+    <span class="popup-close" onclick="closePopup()">X</span>
+    <div id="popup-content">
+        <h2>API Details</h2>
+        <p><strong>Path URL:</strong> <span id="popup-path-url"></span></p>
+        <p><strong>Method:</strong> <span id="popup-method"></span></p>
+        <p><strong>Function Name:</strong> <span id="popup-function-name"></span></p>
+        <p><strong>Summary:</strong> <span id="popup-summary"></span></p>
+        <p><strong>Parameter:</strong> <span id="popup-parameter-name"></span></p>
+        <p><strong>Parameter Datatype:</strong> <span id="popup-parameter-datatype"></span></p>
+        <p><strong>Parameter Required:</strong> <span id="popup-parameter-required"></span></p>
+        <p><strong>Parameter In:</strong> <span id="popup-parameter-in"></span></p>
+
+        <div class="popup-buttons">
+            <button onclick="cancelPopup()">Cancel</button>
+            <button onclick="buy()">Buy</button>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

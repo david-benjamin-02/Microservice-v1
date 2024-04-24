@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>API List</title>
+</head>
+<body>
+<h1>API List</h1>
+<table border="2">
+    <thead>
+    <tr>
+        <th>Path URL</th>
+        <th>Method</th>
+        <th>Function Name</th>
+        <th>Parameter Name</th>
+        <th>Description</th>
+        <th>Parameter Required</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="api : ${index}">
+        <td th:text="${api.path_url}"></td>
+        <td th:text="${api.method}"></td>
+        <td th:text="${api.function_name}"></td>
+        <td th:each="parameter : ${api.parameters}" th:text="${parameter.name}"></td>
+        <td th:each="parameter : ${api.parameters}" th:text="${parameter.description}"></td>
+        <td th:each="parameter : ${api.parameters}" th:text="${parameter.required}"></td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>

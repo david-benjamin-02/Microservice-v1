@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import javax.mail.Service;
 
 
-    @Controller
+@Controller
 public class ApiController {
 
     private final APIRepository apiRepository;
@@ -109,107 +109,109 @@ public class ApiController {
         return "Form";
     }
 
-        @GetMapping("/ServiceDetails")
-        public String searchForAvailability(@RequestParam("availability") String availability,
-                                            @RequestParam("service") String service,
-                                            @RequestParam("cost") String cost, Model model) {
+    @GetMapping("/ServiceDetails")
+    public String searchForAvailability(@RequestParam("availability") String availability,
+                                        @RequestParam("service") String service,
+                                        @RequestParam("cost") String cost, Model model) {
 
-            long SqlstartTime = System.currentTimeMillis();
-            int value = Integer.parseInt(availability);
-            System.out.println("value: " + value);
-            String serviceValue = service;
-            System.out.println("serviceValue: " + serviceValue);
-            int costValue = Integer.parseInt(cost);
-            System.out.println("costValue: " + costValue);
-            // without Indexing start
-            List<API> retrievedServiceData = apiRepository.retrievedServiceData(serviceValue, value, costValue);
-            long SqlendTime = System.currentTimeMillis();
-            long SQlexecutionTime = SqlendTime - SqlstartTime;
-            System.out.println("SQlkexecutionTime: " + SQlexecutionTime);
-            model.addAttribute("withOutIndexTime", SQlexecutionTime);
+        long SqlstartTime = System.currentTimeMillis();
+        int value = Integer.parseInt(availability);
+        System.out.println("value: " + value);
+        String serviceValue = service;
+        System.out.println("serviceValue: " + serviceValue);
+        int costValue = Integer.parseInt(cost);
+        System.out.println("costValue: " + costValue);
+        // without Indexing start
+        List<API> retrievedServiceData = apiRepository.retrievedServiceData(serviceValue, value, costValue);
+        long SqlendTime = System.currentTimeMillis();
+        long SQlexecutionTime = SqlendTime - SqlstartTime;
+        System.out.println("SQlkexecutionTime: " + SQlexecutionTime);
+        model.addAttribute("withOutIndexTime", SQlexecutionTime);
 
-            // without Indexing End
-            // withIndexing Start
-            long IndexPartOneExecutionTime = 0;
-            long IndexPartTwoExecutionTime = 0;
-            long indexPartOnestartTime = System.currentTimeMillis();
-            List<Long> functionIds = apiRepository.findIdsByFunctionName(serviceValue);
-            if (functionIds.isEmpty()) {
-                return showApis(model, "Your Service is not found So choose one in the Below Table");
-            }
-
-            List<Long> availabilityIds = new ArrayList<>();
-            List<Long> costIds = new ArrayList<>();
-            List<API> availabilityDetails = new ArrayList<>();
-            API[] costDetailArray = null;
-
-            try (BufferedReader availabilityReader = new BufferedReader(new FileReader("availabilityId.txt"));
-                 BufferedReader costReader = new BufferedReader(new FileReader("CostId.txt"))) {
-                int lowerRange = (value / 10) * 10;
-                int upperRange = lowerRange + 9;
-                String line;
-                while ((line = availabilityReader.readLine()) != null) {
-                    String[] parts = line.split(":\\s+");
-                    String range = parts[0].trim();
-                    if (range.equals(lowerRange + "-" + upperRange)) {
-                        String[] idStrings = parts[1].trim().split(",");
-                        for (String idString : idStrings) {
-                            Long id = Long.parseLong(idString);
-                            if (functionIds.contains(id)) {
-                                availabilityIds.add(id);
-                                Optional<API> serviceOptional = apiRepository.findById(id);
-                                serviceOptional.ifPresent(availabilityDetails::add);
-                            }
-                        }
-                        break;
-                    }
-                }
-                long indexPartOneEndTime = System.currentTimeMillis();
-                IndexPartOneExecutionTime =   indexPartOneEndTime - indexPartOnestartTime;
-                System.out.println("IndexPartOneExecutionTime: " + IndexPartOneExecutionTime);
-
-                long indexPartTwoStartTime = System.currentTimeMillis();
-                List<Long> costDetails = new ArrayList<>();
-                costDetailArray = null;
-                String ranges = getCostRange(costValue);
-                while ((line = costReader.readLine()) != null) {
-                    String[] parts = line.split(":\\s+");
-                    String range = parts[0].trim();
-                    if (range.equals(ranges)) {
-                        String[] idStrings = parts[1].trim().split(",");
-                        for (String idString : idStrings) {
-                            Long id = Long.parseLong(idString);
-                            if (functionIds.contains(id)) {
-                                costIds.add(id);
-                                Optional<API> serviceOptional = apiRepository.findById(id);
-                                costDetailArray = costDetails.toArray(new API[costDetails.size()]);
-
-                            }
-                        }
-                        break;
-                    }
-                }
-                long indexPartTwoEndTime = System.currentTimeMillis();
-                IndexPartTwoExecutionTime = indexPartTwoEndTime - indexPartTwoStartTime;
-                System.out.println("IndexPartTwoExecutionTime: " + IndexPartTwoExecutionTime);
-            } catch (IOException | NumberFormatException e) {
-                e.printStackTrace();
-            }
-
-            long IndexfinalexecutionTime =   IndexPartOneExecutionTime - IndexPartTwoExecutionTime;
-            System.out.println("IndexfinalexecutionTime: " + IndexfinalexecutionTime);
-
-            model.addAttribute("availabilityDetails", availabilityDetails);
-            model.addAttribute("cost", costDetailArray);
-            model.addAttribute("indexTime", IndexfinalexecutionTime);
-
-            return "details";
+        // without Indexing End
+        // withIndexing Start
+        long IndexPartOneExecutionTime = 0;
+        long IndexPartTwoExecutionTime = 0;
+        long indexPartOnestartTime = System.currentTimeMillis();
+        List<Long> functionIds = apiRepository.findIdsByFunctionName(serviceValue);
+        if (functionIds.isEmpty()) {
+            return showApis(model, "Your Service is not found So choose one in the Below Table");
         }
+
+        List<Long> availabilityIds = new ArrayList<>();
+        List<Long> costIds = new ArrayList<>();
+        List<API> availabilityDetails = new ArrayList<>();
+        API[] costDetailArray = null;
+
+        try (BufferedReader availabilityReader = new BufferedReader(new FileReader("availabilityId.txt"));
+             BufferedReader costReader = new BufferedReader(new FileReader("CostId.txt"))) {
+            int lowerRange = (value / 10) * 10;
+            int upperRange = lowerRange + 9;
+            String line;
+            while ((line = availabilityReader.readLine()) != null) {
+                String[] parts = line.split(":\\s+");
+                String range = parts[0].trim();
+                if (range.equals(lowerRange + "-" + upperRange)) {
+                    String[] idStrings = parts[1].trim().split(",");
+                    for (String idString : idStrings) {
+                        Long id = Long.parseLong(idString);
+                        if (functionIds.contains(id)) {
+                            availabilityIds.add(id);
+                            Optional<API> serviceOptional = apiRepository.findById(id);
+                            serviceOptional.ifPresent(availabilityDetails::add);
+                            System.out.println("availabilityDetails : " +availabilityDetails);
+                        }
+                    }
+                    break;
+                }
+            }
+            long indexPartOneEndTime = System.currentTimeMillis();
+            IndexPartOneExecutionTime =   indexPartOneEndTime - indexPartOnestartTime;
+            System.out.println("IndexPartOneExecutionTime: " + IndexPartOneExecutionTime);
+
+            long indexPartTwoStartTime = System.currentTimeMillis();
+            List<Long> costDetails = new ArrayList<>();
+            costDetailArray = null;
+            String ranges = getCostRange(costValue);
+            while ((line = costReader.readLine()) != null) {
+                String[] parts = line.split(":\\s+");
+                String range = parts[0].trim();
+                if (range.equals(ranges)) {
+                    String[] idStrings = parts[1].trim().split(",");
+                    for (String idString : idStrings) {
+                        Long id = Long.parseLong(idString);
+                        if (functionIds.contains(id)) {
+                            costIds.add(id);
+                            Optional<API> serviceOptional = apiRepository.findById(id);
+                            costDetailArray = costDetails.toArray(new API[costDetails.size()]);
+                            System.out.println("costDetailArray : " +costDetailArray);
+
+                        }
+                    }
+                    break;
+                }
+            }
+            long indexPartTwoEndTime = System.currentTimeMillis();
+            IndexPartTwoExecutionTime = indexPartTwoEndTime - indexPartTwoStartTime;
+            System.out.println("IndexPartTwoExecutionTime: " + IndexPartTwoExecutionTime);
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        long IndexfinalexecutionTime =   IndexPartTwoExecutionTime - IndexPartOneExecutionTime;
+        System.out.println("IndexfinalexecutionTime: " + IndexfinalexecutionTime);
+
+        model.addAttribute("availabilityDetails", availabilityDetails);
+        model.addAttribute("cost", costDetailArray);
+        model.addAttribute("indexTime", IndexfinalexecutionTime);
+
+        return "details";
+    }
 
 
     // Note: The following code will not be executed, as the method returns within the if-else blocks
-        // String htmlContent = generateHtmlTable(response.toString());
-        // return ResponseEntity.ok().body(htmlContent);
+    // String htmlContent = generateHtmlTable(response.toString());
+    // return ResponseEntity.ok().body(htmlContent);
 
 
     private String getCostRange(int costValue) {
@@ -362,7 +364,7 @@ public class ApiController {
             e.printStackTrace();
         }
     }
-   // Cost File Convert
+    // Cost File Convert
 
     @GetMapping("/covertCostFile")
     @ResponseBody
@@ -410,9 +412,3 @@ public class ApiController {
         }
     }
 }
-
-
-
-
-
-

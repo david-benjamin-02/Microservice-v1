@@ -62,6 +62,23 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* Added table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 
@@ -70,133 +87,83 @@
     <div th:if="${availability.id == cost.id}" class="details">
         <span class="close" onclick="closeDivision(this)">x</span>
         <h2>API Details</h2>
-        <h2>Customer Request Satisfied</h2>
-        <p><strong>Path URL:</strong> <span th:text="${availability.path_url}"></span></p>
-        <p><strong>Method:</strong> <span th:text="${availability.method}"></span></p>
-        <p><strong>Function Name:</strong> <span th:text="${availability.function_name}"></span></p>
-        <p><strong>Summary:</strong> <span th:text="${availability.fun_description}"></span></p>
-        <p><strong>Parameter:</strong>
-            <span th:if="${availability.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${availability.parameters}" th:text="${parameter.name}"></li>
-            </ul>
-        </span>
-            <span th:unless="${availability.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Parameter Datatype:</strong> String</p>
-        <p><strong>Parameter Required:</strong>
-            <span th:if="${availability.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${availability.parameters}" th:if="${parameter.required != null}" th:text="${parameter.required}"></li>
-            </ul>
-        </span>
-            <span th:unless="${availability.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Parameter In:</strong>
-            <span th:if="${availability.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${availability.parameters}" th:if="${parameter.parameterIn != null}" th:text="${parameter.parameterIn}"></li>
-            </ul>
-        </span>
-            <span th:unless="${availability.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Availability:</strong> <span th:text="${availability.availability}"></span></p>
-        <p><strong>Cost:</strong> <span th:text="${availability.cost}"></span></p>
-        <p><strong>Response Time:</strong> <span th:text="${availability.response_time}"></span></p>
+        <table>
+            <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Path URL</td>
+                <td><span th:text="${availability.path_url}"></span></td>
+            </tr>
+            <tr>
+                <td>Method</td>
+                <td><span th:text="${availability.method}"></span></td>
+            </tr>
+            <tr>
+                <td>Function Name</td>
+                <td><span th:text="${availability.function_name}"></span></td>
+            </tr>
+        </table>
         <div class="buttons">
             <button onclick="showOnly(this)">Buy</button>
-            <!-- <button onclick="closeDivision(this)">Close</button> -->
         </div>
     </div>
 
     <div th:if="${cost != null}" class="details">
         <span class="close" onclick="closeDivision(this)">x</span>
         <h4>Your Cost only Matched</h4>
-        <p><strong>Path URL:</strong> <span th:text="${cost.path_url}"></span></p>
-        <p><strong>Method:</strong> <span th:text="${cost.method}"></span></p>
-        <p><strong>Function Name:</strong> <span th:text="${cost.function_name}"></span></p>
-        <p><strong>Summary:</strong> <span th:text="${cost.fun_description}"></span></p>
-        <p><strong>Parameter:</strong>
-            <span th:if="${cost.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${cost.parameters}" th:text="${parameter.name}"></li>
-            </ul>
-        </span>
-            <span th:unless="${cost.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Parameter Datatype:</strong> String</p>
-        <p><strong>Parameter Required:</strong>
-            <span th:if="${cost.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${cost.parameters}" th:if="${parameter.required != null}" th:text="${parameter.required}"></li>
-            </ul>
-        </span>
-            <span th:unless="${cost.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Parameter In:</strong>
-            <span th:if="${cost.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${cost.parameters}" th:if="${parameter.parameterIn != null}" th:text="${parameter.parameterIn}"></li>
-            </ul>
-        </span>
-            <span th:unless="${cost.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Availability:</strong> <span th:text="${cost.availability}"></span></p>
-        <p><strong>Cost:</strong> <span th:text="${cost.cost}"></span></p>
-        <p><strong>Response Time:</strong> <span th:text="${cost.response_time}"></span></p>
+        <table>
+            <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Path URL</td>
+                <td><span th:text="${cost.path_url}"></span></td>
+            </tr>
+            <tr>
+                <td>Method</td>
+                <td><span th:text="${cost.method}"></span></td>
+            </tr>
+            <tr>
+                <td>Function Name</td>
+                <td><span th:text="${cost.function_name}"></span></td>
+            </tr>
+        </table>
         <div class="buttons">
             <button onclick="showOnly(this)">Buy</button>
-            <!-- <button onclick="closeDivision(this)">Close</button> -->
         </div>
     </div>
 
     <div th:if="${availability != null}" class="details">
         <span class="close" onclick="closeDivision(this)">x</span>
         <h4>Your Availability only Matched</h4>
-        <p><strong>Path URL:</strong> <span th:text="${availability.path_url}"></span></p>
-        <p><strong>Method:</strong> <span th:text="${availability.method}"></span></p>
-        <p><strong>Function Name:</strong> <span th:text="${availability.function_name}"></span></p>
-        <p><strong>Summary:</strong> <span th:text="${availability.fun_description}"></span></p>
-        <p><strong>Parameter:</strong>
-            <span th:if="${availability.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${availability.parameters}" th:text="${parameter.name}"></li>
-            </ul>
-        </span>
-            <span th:unless="${availability.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Parameter Datatype:</strong> String</p>
-        <p><strong>Parameter Required:</strong>
-            <span th:if="${availability.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${availability.parameters}" th:if="${parameter.required != null}" th:text="${parameter.required}"></li>
-            </ul>
-        </span>
-            <span th:unless="${availability.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Parameter In:</strong>
-            <span th:if="${availability.parameters != null}">
-            <ul>
-                <li th:each="parameter : ${availability.parameters}" th:if="${parameter.parameterIn != null}" th:text="${parameter.parameterIn}"></li>
-            </ul>
-        </span>
-            <span th:unless="${availability.parameters != null}">NULL</span>
-        </p>
-        <p><strong>Availability:</strong> <span th:text="${availability.availability}"></span></p>
-        <p><strong>Cost:</strong> <span th:text="${availability.cost}"></span></p>
-        <p><strong>Response Time:</strong> <span th:text="${availability.response_time}"></span></p>
+        <table>
+            <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Path URL</td>
+                <td><span th:text="${availability.path_url}"></span></td>
+            </tr>
+            <tr>
+                <td>Method</td>
+                <td><span th:text="${availability.method}"></span></td>
+            </tr>
+            <tr>
+                <td>Function Name</td>
+                <td><span th:text="${availability.function_name}"></span></td>
+            </tr>
+        </table>
         <div class="buttons">
             <button onclick="showOnly(this)">Buy</button>
-            <!-- <button onclick="closeDivision(this)">Close</button> -->
         </div>
     </div>
 </div>
 
 <script>
-    // function closeDivision(button) {
-    //     button.parentNode.style.display = "none";
-    // }
-
     function showOnly(button) {
         var detailsDivs = document.getElementsByClassName("details");
         for (var i = 0; i < detailsDivs.length; i++) {

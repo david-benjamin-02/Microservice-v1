@@ -14,20 +14,8 @@ public class ActuatorController {
         return "currency";
     }
 
-    @GetMapping("/calculator")
-    public String calculator() {
-        return "calculator";
-    }
 
-    @GetMapping("/measurement")
-    public String measurement() {
-        return "measurement";
-    }
 
-    @GetMapping("/todolist")
-    public String todolist() {
-        return "todolist";
-    }
 
 //    public String makeUrl(HttpServletRequest request) {
 //        return "currency";

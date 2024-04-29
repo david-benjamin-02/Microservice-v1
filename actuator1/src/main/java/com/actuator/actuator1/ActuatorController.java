@@ -13,6 +13,22 @@ public class ActuatorController {
     public String currency() {
         return "currency";
     }
+
+    @GetMapping("/calculator")
+    public String calculator() {
+        return "calculator";
+    }
+
+    @GetMapping("/measurement")
+    public String measurement() {
+        return "measurement";
+    }
+
+    @GetMapping("/todolist")
+    public String todolist() {
+        return "todolist";
+    }
+
 //    public String makeUrl(HttpServletRequest request) {
 //        return "currency";
 //        // return request.getRequestURL().toString() + "?" + request.getQueryString();

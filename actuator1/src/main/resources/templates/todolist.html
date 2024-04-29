@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        span {
+            flex-grow: 1;
+        }
+
+        button.delete {
+            background-color: #f44336;
+        }
+
+        button.delete:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Add new task">
+    <button onclick="addTask()">Add</button>
+    <ul id="taskList">
+        <!-- Tasks will be dynamically added here -->
+    </ul>
+</div>
+
+<script>
+    let tasks = [];
+
+    function addTask() {
+        const input = document.getElementById('taskInput');
+        const taskText = input.value.trim();
+        if (taskText !== '') {
+            const task = {
+                id: Date.now(),
+                text: taskText,
+                completed: false
+            };
+            tasks.push(task);
+            input.value = '';
+            renderTasks();
+        }
+    }
+
+    function deleteTask(id) {
+        tasks = tasks.filter(task => task.id !== id);
+        renderTasks();
+    }
+
+    function toggleTask(id) {
+        const task = tasks.find(task => task.id === id);
+        if (task) {
+            task.completed = !task.completed;
+            renderTasks();
+        }
+    }
+
+    function renderTasks() {
+        const list = document.getElementById('taskList');
+        list.innerHTML = '';
+        tasks.forEach(task => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+            <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id})">
+            <span>${task.text}</span>
+            <button onclick="deleteTask(${task.id})">Delete</button>
+        `;
+            list.appendChild(li);
+        });
+    }
+
+</script>
+</body>
+</html>

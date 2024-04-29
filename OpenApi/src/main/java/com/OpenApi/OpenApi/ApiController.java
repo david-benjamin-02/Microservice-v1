@@ -197,8 +197,7 @@ public class ApiController {
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
-
-        long IndexfinalexecutionTime =   IndexPartTwoExecutionTime - IndexPartOneExecutionTime;
+        long IndexfinalexecutionTime =   IndexPartOneExecutionTime - IndexPartTwoExecutionTime;
         System.out.println("IndexfinalexecutionTime: " + IndexfinalexecutionTime);
 
         model.addAttribute("availabilityDetails", availabilityDetails);
@@ -238,88 +237,6 @@ public class ApiController {
         }
     }
 
-
-
-
-
-//
-//        if (serviceOptional.isPresent()) {
-//            API service = serviceOptional.get();
-//            response.append("ID: ").append(service.getId())
-//                    .append("\tName: ").append(service.getFunction_name())
-//                    .append("\tPath URL: ").append(service.getPath_url())
-//                    .append("\t").append(service.getMethod())
-//                    .append("\t").append(service.getRequired())
-//                    .append("\t").append(service.getOutput())
-//                    .append("\tAvailability: ").append(service.getAvailability())
-//                    .append("\tCost: ").append(service.getCost())
-//                    .append("\tResponse Time: ").append(service.getResponse_time())
-//                    .append("\tFunction Description: ").append(service.getFun_description())
-//                    .append("\n")
-//                    .append("\n");
-//
-//        } else {
-//            response.append("No service found for ID: ").append(id).append("\n");
-//        }
-//
-//        return response.toString();
-
-
-//    private String generateHtmlTable(String response) {
-//        StringBuilder html = new StringBuilder();
-//        html.append("<!DOCTYPE html>\n");
-//        html.append("<html lang=\"en\">\n");
-//        html.append("<head>\n");
-//        html.append("<meta charset=\"UTF-8\">\n");
-//        html.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n");
-//        html.append("<title>Service Details</title>\n");
-//        html.append("<style>\n");
-//        html.append("table {\n");
-//        html.append("    border-collapse: collapse;\n");
-//        html.append("    width: 100%;\n");
-//        html.append("}\n");
-//        html.append("th, td {\n");
-//        html.append("    border: 1px solid black;\n");
-//        html.append("    padding: 8px;\n");
-//        html.append("    text-align: left;\n");
-//        html.append("}\n");
-//        html.append("th {\n");
-//        html.append("    background-color: #f2f2f2;\n");
-//        html.append("}\n");
-//        html.append("</style>\n");
-//        html.append("</head>\n");
-//        html.append("<body>\n");
-//        html.append("<h2>Service Details</h2>\n");
-//        html.append("<table>\n");
-//        html.append("<tr>\n");
-//        html.append("<th>ID</th>\n");
-//        html.append("<th>Name</th>\n");
-//        html.append("<th>Path URL</th>\n");
-//        html.append("<th>Method</th>\n");
-//        html.append("<th>Required</th>\n");
-//        html.append("<th>Output</th>\n");
-//        html.append("<th>Availability</th>\n");
-//        html.append("<th>Cost</th>\n");
-//        html.append("<th>Response Time</th>\n");
-//        html.append("<th>Function Description</th>\n");
-//        html.append("</tr>\n");
-//
-//        String[] rows = response.split("\n\n");
-//        for (String row : rows) {
-//            String[] cols = row.split("\t");
-//            html.append("<tr>\n");
-//            for (String col : cols) {
-//                html.append("<td>").append(col).append("</td>\n");
-//            }
-//            html.append("</tr>\n");
-//        }
-//
-//        html.append("</table>\n");
-//        html.append("</body>\n");
-//        html.append("</html>\n");
-//
-//        return html.toString();
-//    }
 
 // availability file Generator
 

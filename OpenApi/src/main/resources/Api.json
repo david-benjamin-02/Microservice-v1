@@ -11,11 +11,11 @@
     "application/json"
   ],
   "paths": {
-    "/http://devil-db:8081/add": {
+    "/http://devil-db:8083/calculator": {
       "post": {
-        "operationId": "IndianRupeesConvertUSD",
-        "summary": "Create agent build",
-        "description": "Creates an agent build.\n",
+        "operationId": "calculator",
+        "summary": "Create calculator build",
+        "description": "Creates an calculator build.\n",
         "produces": [
           "application/json"
         ],
@@ -29,9 +29,9 @@
         }
       },
       "get": {
-        "operationId": "IndianRupeesConvertUSD",
-        "summary": "List agent builds",
-        "description": "Lists agent builds.\n",
+        "operationId": "calculator",
+        "summary": "List calculator builds",
+        "description": "Lists calculator builds.\n",
         "produces": [
           "application/json"
         ],
@@ -47,9 +47,9 @@
     },
     "/v2.1/os-agents/{id}": {
       "put": {
-        "operationId": "updatebuild",
-        "summary": "Update agent build",
-        "description": "Updates an agent build.\n",
+        "operationId": "calculator Build",
+        "summary": "Update calculator build",
+        "description": "Updates an calculator build.\n",
         "produces": [
           "application/json"
         ],
